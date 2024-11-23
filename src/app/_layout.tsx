@@ -1,12 +1,13 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native'
 import { Stack } from 'expo-router'
-import { useColorScheme } from 'react-native'
 import { TamaguiProvider } from 'tamagui'
 import tamaguiConfig from '../../tamagui.config'
 import { useFonts } from 'expo-font';
+import useThemeStore from '../stores/themeStore'
+import { StatusBar } from 'expo-status-bar';
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme()
+  const { themeType } = useThemeStore();
 
   const [loaded] = useFonts({
     Inter: require('@tamagui/font-inter/otf/Inter-Medium.otf'),
@@ -19,8 +20,9 @@ export default function RootLayout() {
 
 
   return (
-    <TamaguiProvider config={tamaguiConfig} defaultTheme={colorScheme!}>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <TamaguiProvider config={tamaguiConfig} defaultTheme={themeType}>
+      <ThemeProvider value={themeType === 'dark' ? DarkTheme : DefaultTheme}>
+        <StatusBar style={themeType === 'dark' ? 'light' : 'dark'} />
         <Stack>
           <Stack.Screen name="index" options={{ headerShown: false }} />
         </Stack>
