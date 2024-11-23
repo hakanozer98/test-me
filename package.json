@@ -9,7 +9,8 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "test": "jest --watchAll",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "generate-themes": "tamagui generate-themes ./theme-builder.ts ./theme-output.ts"
   },
   "jest": {
     "preset": "jest-expo"
@@ -19,6 +20,7 @@
     "@react-navigation/bottom-tabs": "^7.0.0",
     "@react-navigation/native": "^7.0.0",
     "@tamagui/babel-plugin": "^1.117.1",
+    "@tamagui/cli": "^1.117.1",
     "@tamagui/config": "^1.117.1",
     "expo": "~52.0.11",
     "expo-blur": "~14.0.1",
