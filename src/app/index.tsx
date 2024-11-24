@@ -1,10 +1,11 @@
-import { View, TextInput, KeyboardAvoidingView, Platform, ScrollView } from "react-native";
+import { View, TextInput, KeyboardAvoidingView, Platform, ScrollView, Alert } from "react-native";
 import { useTheme, Text, Button, H1, Spinner } from "tamagui";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import useThemeStore from "../stores/themeStore";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
 import { generateQuiz } from "../services/openai";
+import { router } from "expo-router";
 
 export default function Index() {
   const { themeType, setTheme } = useThemeStore();
@@ -12,23 +13,35 @@ export default function Index() {
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const toggleTheme = () => {
+  const toggleTheme = async () => {
     setTheme(themeType === "dark" ? "light" : "dark");
   }
 
   const handleSend = async () => {
     console.log('Sending message:', message);
-    if (!message.trim()) return;
+    if (!message.trim() || isLoading) return;
     
     try {
       setIsLoading(true);
       console.log('Generating quiz...');
       const quiz = await generateQuiz(message);
+      
+      if (!quiz) {
+        throw new Error('No quiz data received');
+      }
+      
       console.log('Quiz generated:', JSON.stringify(quiz, null, 2));
       setMessage("");
+      router.navigate({
+        pathname: "/quiz",
+        params: { quiz: JSON.stringify(quiz) }
+      });
     } catch (error) {
       console.error('Error:', error);
-      // Handle error appropriately
+      Alert.alert(
+        'Error',
+        'Failed to generate quiz. Please try again.'
+      );
     } finally {
       setIsLoading(false);
     }
@@ -79,8 +92,8 @@ export default function Index() {
               <Button 
                 size="$5" 
                 onPress={handleSend} 
-                disabled={!message.trim()}
-                opacity={!message.trim() ? 0.5 : 1}
+                disabled={!message.trim() || isLoading}
+                opacity={!message.trim() || isLoading ? 0.5 : 1}
               >
                 {isLoading ? (
                   <Spinner color={theme.color9.get()} />

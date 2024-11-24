@@ -25,6 +25,7 @@ export default function RootLayout() {
         <StatusBar style={themeType === 'dark' ? 'light' : 'dark'} />
         <Stack>
           <Stack.Screen name="index" options={{ headerShown: false }} />
+          <Stack.Screen name="quiz" options={{ headerShown: false }} />
         </Stack>
       </ThemeProvider>
     </TamaguiProvider>
