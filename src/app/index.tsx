@@ -1,9 +1,10 @@
-import { View, TextInput, Pressable, KeyboardAvoidingView, Platform, ScrollView } from "react-native";
+import { View, TextInput, KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 import { useTheme, Text, Button, H1 } from "tamagui";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import useThemeStore from "../stores/themeStore";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
+import { generateQuiz } from "../services/openai";
 
 export default function Index() {
   const { themeType, setTheme } = useThemeStore();
@@ -14,9 +15,19 @@ export default function Index() {
     setTheme(themeType === "dark" ? "light" : "dark");
   }
 
-  const handleSend = () => {
-    console.log("Sending message:", message);
-    setMessage("");
+  const handleSend = async () => {
+    console.log('Sending message:', message);
+    if (!message.trim()) return;
+    
+    try {
+      console.log('Generating quiz...');
+      const quiz = await generateQuiz(message);
+      console.log('Quiz generated:', JSON.stringify(quiz, null, 2));
+      setMessage("");
+    } catch (error) {
+      console.error('Error:', error);
+      // Handle error appropriately
+    }
   }
 
   return (
