@@ -13,8 +13,8 @@ export default function RootLayout() {
   const { themeType } = useThemeStore();
 
   const [loaded] = useFonts({
-    Inter: require('@tamagui/font-inter/otf/Inter-Medium.otf'),
-    InterBold: require('@tamagui/font-inter/otf/Inter-Bold.otf'),
+    Inter: require('../assets/fonts/Inter-Medium.otf'),
+    InterBold: require('../assets/fonts/Inter-Bold.otf')
   })
 
   useEffect(() => {
