@@ -7,8 +7,10 @@ import { useState } from "react";
 import { generateQuiz } from "../services/openai";
 import { router } from "expo-router";
 import * as Haptics from 'expo-haptics';
+import { quizStore$ } from "../legend-state/quiz-store";
+import { observer } from "@legendapp/state/react";
 
-export default function Index() {
+export const Index = observer(() => {
   const { themeType, setTheme } = useThemeStore();
   const theme = useTheme();
   const [message, setMessage] = useState("");
@@ -65,7 +67,18 @@ export default function Index() {
         keyboardShouldPersistTaps="handled"
       >
         <SafeAreaView style={{ flex: 1 }}>
-          <View style={{ flexDirection: 'row', justifyContent: 'flex-end', padding: 16 }}>
+          <View style={{ 
+            flexDirection: 'row', 
+            justifyContent: 'space-between', 
+            padding: 16,
+            alignItems: 'center'
+          }}>
+            <MaterialCommunityIcons
+              name="history"
+              size={32}
+              color={theme.color10.get()}
+              onPress={() => router.navigate('/history')}
+            />
             <MaterialCommunityIcons
               name={themeType === "dark" ? "white-balance-sunny" : "moon-waning-crescent"}
               size={32}
@@ -131,4 +144,6 @@ export default function Index() {
       </ScrollView>
     </KeyboardAvoidingView>
   );
-}
+});
+
+export default Index;

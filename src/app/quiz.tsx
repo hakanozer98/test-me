@@ -9,6 +9,7 @@ import Animated, {
   useAnimatedStyle, 
   useSharedValue 
 } from 'react-native-reanimated';
+import { quizStore$ } from "../legend-state/quiz-store";
 
 export default function Quiz() {
   const { quiz } = useLocalSearchParams() as { quiz: string };
@@ -39,6 +40,7 @@ export default function Quiz() {
 
   const handleSubmit = () => {
     setShowResults(true);
+    quizStore$.addQuizAttempt(parsedQuiz, selectedAnswers);
   };
 
   const handleNext = () => {
