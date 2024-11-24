@@ -1,5 +1,5 @@
 import { View, TextInput, KeyboardAvoidingView, Platform, ScrollView } from "react-native";
-import { useTheme, Text, Button, H1 } from "tamagui";
+import { useTheme, Text, Button, H1, Spinner } from "tamagui";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import useThemeStore from "../stores/themeStore";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -10,6 +10,7 @@ export default function Index() {
   const { themeType, setTheme } = useThemeStore();
   const theme = useTheme();
   const [message, setMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const toggleTheme = () => {
     setTheme(themeType === "dark" ? "light" : "dark");
@@ -20,6 +21,7 @@ export default function Index() {
     if (!message.trim()) return;
     
     try {
+      setIsLoading(true);
       console.log('Generating quiz...');
       const quiz = await generateQuiz(message);
       console.log('Quiz generated:', JSON.stringify(quiz, null, 2));
@@ -27,6 +29,8 @@ export default function Index() {
     } catch (error) {
       console.error('Error:', error);
       // Handle error appropriately
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -72,7 +76,18 @@ export default function Index() {
                 placeholder="Example: 'Create a test about JavaScript fundamentals' or 'Generate questions about World War II'"
                 placeholderTextColor={theme.color6.get()}
               />
-              <Button size="$5" onPress={handleSend}>Generate Test</Button>
+              <Button 
+                size="$5" 
+                onPress={handleSend} 
+                disabled={!message.trim()}
+                opacity={!message.trim() ? 0.5 : 1}
+              >
+                {isLoading ? (
+                  <Spinner color={theme.color9.get()} />
+                ) : (
+                  <Text color={theme.color9.get()} style={{fontSize: 18}}>Generate Test</Text>
+                )}
+              </Button>
           </View>
         </SafeAreaView>
       </ScrollView>
