@@ -3,14 +3,21 @@ import { quizStore$, AttemptItemProps } from '../legend-state/quiz-store'
 import { For, observer } from '@legendapp/state/react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Button, Card, H2, H3, Paragraph, ScrollView, Text, YStack } from 'tamagui'
+import { useRouter } from 'expo-router'
 
 function AttemptItem({ item$ }: AttemptItemProps) {
     const attempt = item$.get()
     const date = new Date(attempt.date).toLocaleString()
     const totalQuestions = attempt.questions.length
+    const router = useRouter()
 
     return (
-        <Card bordered marginBottom="$3">
+        <Card 
+            bordered 
+            marginBottom="$3" 
+            pressStyle={{ scale: 0.95 }}
+            onPress={() => router.navigate({ pathname: '/attempt', params: { id: attempt.id } })}
+        >
             <Card.Header padded>
                 <Paragraph theme="alt2">{date}</Paragraph>
                 <Paragraph>

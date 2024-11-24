@@ -36,6 +36,7 @@ export default function RootLayout() {
           <Stack.Screen name="index" options={{ headerShown: false }} />
           <Stack.Screen name="quiz" options={{ headerShown: false }} />
           <Stack.Screen name="history" options={{ headerShown: false }} />
+          <Stack.Screen name="attempt" options={{ headerShown: false }} />
         </Stack>
       </ThemeProvider>
     </TamaguiProvider>
