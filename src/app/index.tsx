@@ -1,17 +1,19 @@
 import { View, TextInput, KeyboardAvoidingView, Platform, ScrollView, Alert } from "react-native";
-import { useTheme, Text, Button, H1, Spinner } from "tamagui";
+import { useTheme, Text, Button, H2, Spinner, Slider, XStack } from "tamagui";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import useThemeStore from "../stores/themeStore";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
 import { generateQuiz } from "../services/openai";
 import { router } from "expo-router";
+import * as Haptics from 'expo-haptics';
 
 export default function Index() {
   const { themeType, setTheme } = useThemeStore();
   const theme = useTheme();
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [questionCount, setQuestionCount] = useState(10);
 
   const toggleTheme = async () => {
     setTheme(themeType === "dark" ? "light" : "dark");
@@ -24,7 +26,7 @@ export default function Index() {
     try {
       setIsLoading(true);
       console.log('Generating quiz...');
-      const quiz = await generateQuiz(message);
+      const quiz = await generateQuiz(message, questionCount);
       
       if (!quiz) {
         throw new Error('No quiz data received');
@@ -47,6 +49,11 @@ export default function Index() {
     }
   }
 
+  const handleQuestionCountChange = ([value]: number[]) => {
+    setQuestionCount(value);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+  };
+
   return (
     <KeyboardAvoidingView 
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -67,7 +74,7 @@ export default function Index() {
             />
           </View>
           <View style={{ flex: 1, padding: 16, gap: 24}}>
-              <H1 style={{color: theme.color9.get(), fontWeight: 'bold', textAlign: 'center', marginBottom: 24}}>AI Test Generator</H1>
+              <H2 style={{color: theme.color9.get(), fontWeight: 'bold', textAlign: 'center', marginVertical: 12}}>AI Test Generator</H2>
               <Text style={{color: theme.color9.get(), textAlign: 'center', marginBottom: 40}}>
                 Enter any topic or subject, and I'll generate a multiple-choice test to help you assess your knowledge.
               </Text>
@@ -89,6 +96,24 @@ export default function Index() {
                 placeholder="Example: 'Create a test about JavaScript fundamentals' or 'Generate questions about World War II'"
                 placeholderTextColor={theme.color8.get()}
               />
+              <View style={{ gap: 8 }}>
+                <Text style={{color: theme.color9.get(), marginBottom: 8}}>
+                  Number of questions: {questionCount}
+                </Text>
+                <Slider
+                  size="$4"
+                  defaultValue={[10]}
+                  min={5}
+                  max={20}
+                  step={1}
+                  onValueChange={handleQuestionCountChange}
+                >
+                  <Slider.Track>
+                    <Slider.TrackActive />
+                  </Slider.Track>
+                  <Slider.Thumb size="$1" circular index={0} />
+                </Slider>
+              </View>
               <Button 
                 size="$5" 
                 onPress={handleSend} 
