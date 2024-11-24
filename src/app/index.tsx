@@ -62,7 +62,7 @@ export default function Index() {
             <MaterialCommunityIcons
               name={themeType === "dark" ? "white-balance-sunny" : "moon-waning-crescent"}
               size={32}
-              color={theme.color9.get()}
+              color={theme.color10.get()}
               onPress={toggleTheme}
             />
           </View>
@@ -73,12 +73,12 @@ export default function Index() {
               </Text>
               <TextInput
                 style={{
-                  borderWidth: 1,
-                  borderColor: theme.color6.get(),
-                  backgroundColor: theme.color2.get(),
+                  borderWidth: 1.5,
+                  borderColor: theme.color8.get(),
+                  backgroundColor: theme.color1.get(),
                   borderRadius: 8,
                   padding: 12,
-                  color: theme.color.get(),
+                  color: theme.color12.get(),
                   minHeight: 150,
                   maxHeight: 200,
                   textAlignVertical: 'top'
@@ -87,7 +87,7 @@ export default function Index() {
                 value={message}
                 onChangeText={setMessage}
                 placeholder="Example: 'Create a test about JavaScript fundamentals' or 'Generate questions about World War II'"
-                placeholderTextColor={theme.color6.get()}
+                placeholderTextColor={theme.color8.get()}
               />
               <Button 
                 size="$5" 
@@ -96,9 +96,9 @@ export default function Index() {
                 opacity={!message.trim() || isLoading ? 0.5 : 1}
               >
                 {isLoading ? (
-                  <Spinner color={theme.color9.get()} />
+                  <Spinner color={theme.color12.get()} />
                 ) : (
-                  <Text color={theme.color9.get()} style={{fontSize: 18}}>Generate Test</Text>
+                  <Text color={theme.color12.get()} style={{fontSize: 18}}>Generate Test</Text>
                 )}
               </Button>
           </View>
